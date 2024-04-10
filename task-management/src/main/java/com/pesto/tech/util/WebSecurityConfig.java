@@ -36,7 +36,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
-                "/users/login"
+                "/users/login","/users/signup"
         );
     }
 
@@ -44,7 +44,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector).servletPath("/ms");
         http.cors(Customizer.withDefaults()).csrf(c -> c.disable()).authorizeHttpRequests(authorize ->
-                    authorize.requestMatchers(mvcMatcherBuilder.pattern("/users/login")).permitAll()
+                        authorize.requestMatchers(mvcMatcherBuilder.pattern("/users/login")).permitAll()
+                                .requestMatchers(mvcMatcherBuilder.pattern("/users/signup")).permitAll()
                     .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

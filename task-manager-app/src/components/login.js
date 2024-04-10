@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { login } from "./task-api-service"
+import { login, signup } from "./task-api-service"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../authContext"
 
@@ -16,13 +16,25 @@ export const Login = ()=>{
 
     const submit = (e)=>{
         e.preventDefault()
+        const body = {
+          userEmail,
+          userName,
+          password
+      }
         if(newAccount){
-
-        }else{
-            const body = {
-                userEmail,
-                password
+          signup(body)
+          .then(res=>{
+            if(res!=null){
+                var role = res.data.data
+                localStorage.setItem("role",role)
+                var token = btoa(userEmail+":"+password)
+                localStorage.setItem("token",token)
+                setLoginContext(res.data.data,token);
+                navigate("/task-manager-app/home")
             }
+        })
+        .catch(err=>console.log(err))
+        }else{
             login(body)
             .then(res=>{
                 if(res!=null){

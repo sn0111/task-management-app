@@ -61,9 +61,7 @@ public class UserService {
             UserEntity userEntity = userDAO.saveUser(entity);
             return modelMapper.map(userEntity,UserDTO.class);
         }
-        UserEntity entity = modelMapper.map(dto, UserEntity.class);
-        UserEntity userEntity = userDAO.saveUser(entity);
-        return modelMapper.map(userEntity,UserDTO.class);
+        return null;
     }
 
     public UserDTO loginUser(UserDTO dto){
@@ -73,7 +71,6 @@ public class UserService {
         Optional<UserDetails> userDetails = userDAO.userDetails(dto.getUserEmail());
         if(userDetails.isPresent() &&  encoder.matches(dto.getPassword(),userDetails.get().getPassword())){
             UserEntity entity =(UserEntity) userDetails.get();
-            UserDTO userDTO = new UserDTO();
             dto.setRole(entity.getRole());
             dto.setUserId(entity.getUserId());
             return dto;

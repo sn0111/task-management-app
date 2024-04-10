@@ -20,13 +20,17 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<UserDetails> userDetails = userDAO.userDetails(userEmail);
-        if(userDetails.isPresent()){
-            UserEntity entity =(UserEntity) userDetails.get();
-            return Optional.of(entity.getUserId());
-        }else {
-            throw new BadCredentialsException("Invalid Credentials");
+        try{
+            String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+            Optional<UserDetails> userDetails = userDAO.userDetails(userEmail);
+            if(userDetails.isPresent()){
+                UserEntity entity =(UserEntity) userDetails.get();
+                return Optional.of(entity.getUserId());
+            }else {
+                throw new BadCredentialsException("Invalid Credentials");
+            }
+        }catch (Exception ex){
+            return Optional.of(1L);
         }
     }
 

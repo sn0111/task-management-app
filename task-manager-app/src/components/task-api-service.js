@@ -11,6 +11,11 @@ export const login =async (obj)=>{
     return request;
 }
 
+export const signup =async (obj)=>{
+    const request = await axios.post(`${userUrl}/signup`,obj)
+    return request;
+}
+
 export const adminUsers =async ()=>{
     const request = await axios.get(`${userUrl}`, {headers:{"Authorization":basicAuth}})
     return request;

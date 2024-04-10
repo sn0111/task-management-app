@@ -40,13 +40,14 @@ export const Home = ()=>{
             description,
             status,
             user:{
-                userId:1,
+                userId:localStorage.getItem("userId"),
             }
         }
         addUserTask(body)
         .then(res=>{
             if(res!=null){
                 // setTasks(res.data.data)
+                clear()
                 getUserTasks()
             }
         })
@@ -65,6 +66,7 @@ export const Home = ()=>{
         .then(res=>{
             if(res!=null){
                 // setTasks(res.data.data)
+                clear()
                 getUserTasks()
             }
         })
@@ -90,8 +92,8 @@ export const Home = ()=>{
         setDescription(task.description)
         if(task.status==="To Do"){
             setStatus("TODO")
-        }else if(task.status==="In Pending"){
-            setStatus("IN_PENDING")
+        }else if(task.status==="In Progress"){
+            setStatus("IN_PROGRESS")
         }else if(task.status==="Done"){
             setStatus("DONE")
         }
@@ -172,7 +174,7 @@ export const Home = ()=>{
                                 <div class="card">
                                     <div class="card-body">
                                         <div className="card-title d-flex justify-content-between">
-                                            <div>{task.title} <span class="badge rounded-pill bg-primary">{task.status}</span></div>
+                                            <div>{task.title} <span class={`badge rounded-pill bg-${task.status==="To Do"? "secondary":task.status==="In Progress"?"primary":"success"}`}>{task.status}</span></div>
                                             <div>
                                                 <img className="img-icon" src={updateIcon} onClick={()=>editUserTask(task)}/>
                                                 <img className="img-icon" src={deleteIcon} onClick={()=>deleteUserTask(task.taskId)}/>

@@ -3,7 +3,6 @@ package com.pesto.tech.service;
 import com.pesto.tech.dao.TaskDAO;
 import com.pesto.tech.data.dto.TaskDTO;
 import com.pesto.tech.data.entity.TaskEntity;
-import com.pesto.tech.data.entity.TaskStatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +48,8 @@ public class TaskService {
         if(taskByTaskId.isPresent()){
             TaskEntity entity = modelMapper.map(dto, TaskEntity.class);
             entity.setTaskId(taskByTaskId.get().getTaskId());
+            entity.setDescription(taskByTaskId.get().getDescription());
+            entity.setTitle(taskByTaskId.get().getTitle());
             entity.setUser(taskByTaskId.get().getUser());
             TaskEntity taskEntity = taskDAO.saveTask(entity);
             return modelMapper.map(taskEntity,TaskDTO.class);
