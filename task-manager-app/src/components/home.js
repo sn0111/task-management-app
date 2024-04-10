@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import deleteIcon from "../svg/delete.svg"
 import updateIcon from "../svg/update.svg"
 import { addUserTask, deleteTask, updateUserTask, userTasks } from "./task-api-service"
 import { Navbar } from "./navbar"
+import { AuthContext } from "../authContext"
 
 export const Home = ()=>{
 
@@ -13,16 +14,17 @@ export const Home = ()=>{
     const [taskId, setTaskId] = useState("")
     const [edit, setEdit] = useState(false)
     const [search, setSearch] = useState("")
-    const [role, setRole] = useState("")
+
+    const { userId } = useContext(AuthContext);
+
 
 
     useEffect(() => {   
-        setRole(localStorage.getItem("role")) 
         getUserTasks()
     },[]);
 
     const getUserTasks = ()=>{
-        userTasks(1)
+        userTasks(localStorage.getItem("userId"))
         .then(res=>{
             if(res!=null){
                 setTasks(res.data.data)

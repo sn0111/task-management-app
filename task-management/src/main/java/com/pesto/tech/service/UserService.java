@@ -66,16 +66,18 @@ public class UserService {
         return modelMapper.map(userEntity,UserDTO.class);
     }
 
-    public String loginUser(UserDTO dto){
+    public UserDTO loginUser(UserDTO dto){
         Assert.notNull(dto.getUserEmail(),"");
         Assert.notNull(dto.getPassword(),"");
 
         Optional<UserDetails> userDetails = userDAO.userDetails(dto.getUserEmail());
         if(userDetails.isPresent() &&  encoder.matches(dto.getPassword(),userDetails.get().getPassword())){
             UserEntity entity =(UserEntity) userDetails.get();
-            System.out.println(entity.getUserId());
-            return entity.getRole().toString();
+            UserDTO userDTO = new UserDTO();
+            dto.setRole(entity.getRole());
+            dto.setUserId(entity.getUserId());
+            return dto;
         }
-        return "";
+        return null;
     }
 }
